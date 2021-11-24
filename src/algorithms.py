@@ -5,10 +5,10 @@ import itertools
 from models.vertice import Vertice
 
 
-def min_domination_set(graph: Graph):
-    return min_domination_set_greedy_complex(graph)
+def min_domination_set(graph: Graph, verbose:bool=False):
+    return min_domination_set_greedy_complex(graph, verbose)
 
-def min_domination_set_greedy_complex(graph: Graph) -> Set[Vertice]:
+def min_domination_set_greedy_complex(graph: Graph, verbose:bool=False) -> Set[Vertice]:
     domination_set = set()
 
     # preprocessing
@@ -21,11 +21,11 @@ def min_domination_set_greedy_complex(graph: Graph) -> Set[Vertice]:
         elif len(vertice_list) == 1:
             domination_set.add(vertice_list[0])
 
+    if verbose: print(f"preprocessing: {len(domination_set)}")
 
-    print(f"preprocessing: {len(domination_set)}")
     # sort vertices by inverted cardinality
-    #cardinality_invert_sorted_vertices = sorted([(vertice,len(graph.edges.get(vertice, list()))) for vertice in graph.vertices], key=lambda tuple: tuple[1], reverse=True)
-    cardinality_invert_sorted_vertices = sorted([(vertice,len(vertice_list)) for vertice, vertice_list in graph.edges.items()], key=lambda tuple: tuple[1], reverse=True)
+    cardinality_invert_sorted_vertices = sorted([(vertice,len(graph.edges.get(vertice, list()))) for vertice in graph.vertices], key=lambda tuple: tuple[1], reverse=True)
+    #cardinality_invert_sorted_vertices = sorted([(vertice,len(vertice_list)) for vertice, vertice_list in graph.edges.items()], key=lambda tuple: tuple[1], reverse=True)
 
     # add vertices to dominating set by cardinality order until reaches the goal
     covered = set(list(domination_set))
@@ -41,22 +41,22 @@ def min_domination_set_greedy_complex(graph: Graph) -> Set[Vertice]:
         if graph.is_domination_set(domination_set):
             break
 
-    print(f"processing: {len(domination_set)}")
+    if verbose: print(f"processing: {len(domination_set)}")
 
-
+    
     # sort domination set vertices by cardinality
     cardinality_sorted_domination_vertices = sorted([(vertice,len(graph.edges.get(vertice, list()))) for vertice in domination_set], key=lambda tuple: tuple[1])
-    # remove extra nodes
+
     for vertice, cardinality in cardinality_sorted_domination_vertices:
+        # remove redundant nodes
         if graph.is_domination_set(domination_set-set([vertice])):
             domination_set.remove(vertice)
 
-    print(f"posprocessing: {len(domination_set)}")
+    if verbose: print(f"posprocessing: {len(domination_set)}")
 
-    
     return domination_set
 
-def min_domination_set_greedy_simple(graph: Graph):
+def min_domination_set_greedy_simple(graph: Graph, verbose:bool=False):
     # sort vertices by cardinality
     cardinality_sorted_vertices = sorted([(vertice,len(vertice_list)) for vertice, vertice_list in graph.edges.items()], key=lambda tuple: tuple[1], reverse=True)
 
@@ -69,7 +69,7 @@ def min_domination_set_greedy_simple(graph: Graph):
     return domination_set
 
 
-def min_domination_set_exaustive(graph: Graph):
+def min_domination_set_exaustive(graph: Graph, verbose:bool=False):
     # generate all possible combinations
     all_combinations = list()
     for i in range(1, len(graph.vertices)+1):

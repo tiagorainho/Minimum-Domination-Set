@@ -66,6 +66,6 @@ if __name__ == '__main__':
     random.seed(92984)
     graph = Graph()
     graph.generate(number_of_vertices, max_number_of_edges, canvas_width, canvas_height, min_distance_between_vertices)
-    graph.min_domination_set = algorithms.min_domination_set(graph)
+    graph.min_domination_set = algorithms.min_domination_set(graph, True)
     show(graph)
 
