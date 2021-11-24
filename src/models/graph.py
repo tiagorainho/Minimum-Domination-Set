@@ -49,14 +49,5 @@ class Graph:
                     remaining_number_of_edges -= 1
                 i += 1
 
-    def is_domination_set(self, vertices: List[Vertice]):
-        connected_vertices = set(vertices)
-        for vertice in vertices:
-            vertices_list = self.edges.get(vertice)
-            if vertices_list == None: continue
-            for vertice_to_connect in vertices_list:
-                connected_vertices.add(vertice_to_connect)
-        return len(connected_vertices) == len(self.vertices)
-
     def __repr__(self):
         return '\n'.join([str(vertice) for vertice in self.vertices])

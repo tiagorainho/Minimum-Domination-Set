@@ -61,7 +61,6 @@ def show(graph_list:List[Graph] or Graph):
     mainloop()
 
 
-
 if __name__ == '__main__':
     random.seed(92984)
     graph = Graph()

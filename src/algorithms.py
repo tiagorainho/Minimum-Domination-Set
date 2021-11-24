@@ -1,5 +1,5 @@
 
-from typing import Set
+from typing import List, Set
 from models.graph import Graph
 import itertools
 from models.vertice import Vertice
@@ -7,6 +7,15 @@ from models.vertice import Vertice
 
 def min_domination_set(graph: Graph, verbose:bool=False):
     return min_domination_set_greedy_complex(graph, verbose)
+
+def is_domination_set(graph:Graph, vertices: List[Vertice]):
+    connected_vertices = set(vertices)
+    for vertice in vertices:
+        vertices_list = graph.edges.get(vertice)
+        if vertices_list == None: continue
+        for vertice_to_connect in vertices_list:
+            connected_vertices.add(vertice_to_connect)
+    return len(connected_vertices) == len(graph.vertices)
 
 def min_domination_set_greedy_complex(graph: Graph, verbose:bool=False) -> Set[Vertice]:
     domination_set = set()
@@ -38,7 +47,7 @@ def min_domination_set_greedy_complex(graph: Graph, verbose:bool=False) -> Set[V
         domination_set.add(vertice)
         covered.add(vertice)
 
-        if graph.is_domination_set(domination_set):
+        if is_domination_set(graph, domination_set):
             break
 
     if verbose: print(f"processing: {len(domination_set)}")
@@ -49,7 +58,7 @@ def min_domination_set_greedy_complex(graph: Graph, verbose:bool=False) -> Set[V
 
     for vertice, cardinality in cardinality_sorted_domination_vertices:
         # remove redundant nodes
-        if graph.is_domination_set(domination_set-set([vertice])):
+        if is_domination_set(graph, domination_set-set([vertice])):
             domination_set.remove(vertice)
 
     if verbose: print(f"posprocessing: {len(domination_set)}")
@@ -64,7 +73,7 @@ def min_domination_set_greedy_simple(graph: Graph, verbose:bool=False):
     domination_set = set()
     for vertice, cardinality in cardinality_sorted_vertices:
         domination_set.add(vertice)
-        if graph.is_domination_set(domination_set):
+        if is_domination_set(graph, domination_set):
             break
     return domination_set
 
@@ -78,6 +87,6 @@ def min_domination_set_exaustive(graph: Graph, verbose:bool=False):
     # try every combination from smaller to larger to check if it is domination set and return the one with the smallest length
     while all_combinations:
         current_combination = all_combinations.pop(0)
-        if graph.is_domination_set(current_combination):
+        if is_domination_set(graph, current_combination):
             break
     return set(current_combination)
