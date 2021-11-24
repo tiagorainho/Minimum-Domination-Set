@@ -4,18 +4,21 @@ from models.graph import Graph
 import itertools
 from models.vertice import Vertice
 
-
-def min_domination_set(graph: Graph, verbose:bool=False):
-    return min_domination_set_greedy_complex(graph, verbose)
-
 def is_domination_set(graph:Graph, vertices: List[Vertice]):
+    if len(vertices) < len(graph.vertices) - len(graph.edges):
+        return False
+
     connected_vertices = set(vertices)
     for vertice in vertices:
         vertices_list = graph.edges.get(vertice)
         if vertices_list == None: continue
-        for vertice_to_connect in vertices_list:
-            connected_vertices.add(vertice_to_connect)
+        connected_vertices.update(vertices_list)
     return len(connected_vertices) == len(graph.vertices)
+    
+
+def min_domination_set(graph: Graph, verbose:bool=False):
+    return min_domination_set_greedy_complex(graph, verbose)
+
 
 def min_domination_set_greedy_complex(graph: Graph, verbose:bool=False) -> Set[Vertice]:
     domination_set = set()
@@ -38,6 +41,7 @@ def min_domination_set_greedy_complex(graph: Graph, verbose:bool=False) -> Set[V
 
     # add vertices to dominating set by cardinality order until reaches the goal
     covered = set(list(domination_set))
+
     for vertice, cardinality in cardinality_invert_sorted_vertices:
         if vertice in covered: continue
 
@@ -51,7 +55,6 @@ def min_domination_set_greedy_complex(graph: Graph, verbose:bool=False) -> Set[V
             break
 
     if verbose: print(f"processing: {len(domination_set)}")
-
     
     # sort domination set vertices by cardinality
     cardinality_sorted_domination_vertices = sorted([(vertice,len(graph.edges.get(vertice, list()))) for vertice in domination_set], key=lambda tuple: tuple[1])
@@ -64,6 +67,7 @@ def min_domination_set_greedy_complex(graph: Graph, verbose:bool=False) -> Set[V
     if verbose: print(f"posprocessing: {len(domination_set)}")
 
     return domination_set
+
 
 def min_domination_set_greedy_simple(graph: Graph, verbose:bool=False):
     # sort vertices by cardinality

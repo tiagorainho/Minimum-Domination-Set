@@ -30,7 +30,7 @@ class Graph:
         self.height = height
 
         # generate vertices
-        while(len(self.vertices) <= number_of_vertices):
+        while(len(self.vertices) < number_of_vertices):
             new_vertice = Vertice(str(len(self.vertices)), random.randint(0, width), random.randint(0, height))
             # recalculate if there is already this vertice
             if all([vertice.distance(new_vertice) >= min_distance_between_vertices for vertice in self.vertices]):

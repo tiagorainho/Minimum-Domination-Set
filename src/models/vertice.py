@@ -10,7 +10,7 @@ class Vertice:
         self.y = y
 
     def distance(self, other):
-        return self.distance_euclidean(other)
+        return self.distance_manhattan(other)
     
     def distance_euclidean(self, other):
         return ((self.x-other.x)**2 +(self.y-other.y)**2)**0.5
