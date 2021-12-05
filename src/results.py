@@ -53,7 +53,7 @@ def show_both_algorithms(number_of_vertices:int, max_number_of_edges:int, seed:i
 
 
 def compare_both_algorithms_with_table(inputs:List[Tuple[int, int, int]]):
-    table = PrettyTable(["Vertices", "Edges", "Custom", "Networkx"])
+    table = PrettyTable(["Vertices", "Edges", "Greedy", "Networkx"])
     last_times = [1, 1]
     last_edges = 1
     last_vertices = 1
@@ -72,7 +72,7 @@ def compare_both_algorithms_with_table(inputs:List[Tuple[int, int, int]]):
         t2 = time.perf_counter()
 
         # save retrieved information about the custom algorithm
-        number_of_edges = sum([len(vertices) for vertices in graph.edges.values()])
+        number_of_edges = graph.number_of_edges
         row1 = [
             f'{len(graph.vertices)} + {round(get_percentage_increase(len(graph.vertices), last_vertices),1)}%',
             f'{number_of_edges} + {round(get_percentage_increase(number_of_edges, last_edges),1)}%'
@@ -114,18 +114,18 @@ if __name__ == '__main__':
     # exit(0)
     compare_both_algorithms_with_table([
         # (number_of_vertices, max_number_of_edges, seed),
-        # (2, 2, 100),
         # (4, 2, 100),
         # (8, 2, 100),
+        # (12, 2,100),
         # (16, 2, 100),
         # (20, 2, 100),
         # (22, 2, 100),
 
-        (125, 5, 100),
-        (250, 5, 100),
-        (500, 5, 100),
-        (1000, 5, 100),
-        (2000, 5, 100),
-        (4000, 5, 100),
-        (8000, 5, 100)
+        (125, 20, 100),
+        (250, 20, 100),
+        (500, 20, 100),
+        (1000, 20, 100),
+        (2000, 20, 100),
+        (4000, 20, 100),
+        (8000, 20, 100)
     ])

@@ -22,12 +22,19 @@ class Graph:
         self.vertices = vertices if vertices != None else set()
         self.edges = edges if edges != None else dict()
     
+    
     @property
     def number_of_edges(self):
-        return sum(len(vertices) for vertices in self.edges.values())
+        s = set()
+        for vertice, vertices in self.edges.items():
+            for vertice2 in vertices:
+                l = sorted([vertice, vertice2])
+                s.add((l[0], l[1]))
+        return len(s)
 
     
     def add_edge(self, vertice1:Vertice, vertice2:Vertice):
+        if vertice1 == vertice2: return
         edges = self.edges.get(vertice1)
         if edges == None: self.edges[vertice1] = set([vertice2])
         else: edges.add(vertice2)
@@ -36,7 +43,7 @@ class Graph:
         if edges == None: self.edges[vertice2] = set([vertice1])
         else: edges.add(vertice1)
 
-    def generate(self, number_of_vertices:int, medium_number_of_edges:int,  width:int=None, height:int=None, min_distance_between_vertices:int=None, connect_with_closest:bool=False, verbose:bool=False):
+    def generate(self, number_of_vertices:int, max_number_of_edges:int,  width:int=None, height:int=None, min_distance_between_vertices:int=None, connect_with_closest:bool=False, verbose:bool=False):
 
         assert (0 if width == None else 1) == (0 if height == None else 1)
 
@@ -81,7 +88,7 @@ class Graph:
 
         # generate edges
         for vertice in self.vertices:
-            remaining_number_of_edges = random.randint(0, medium_number_of_edges)
+            remaining_number_of_edges = random.randint(0, max_number_of_edges)
             if remaining_number_of_edges == 0: continue
             if connect_with_closest:
                 closest_vertices = heapq.nsmallest(remaining_number_of_edges, [(v, vertice.distance(v)) for v in self.vertices if vertice != v], key=lambda t: t[1])

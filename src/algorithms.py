@@ -22,17 +22,21 @@ def min_domination_set(graph: Graph, verbose:bool=False):
     return min_domination_set_greedy_complex(graph, verbose=verbose)
 
 
-def min_domination_set_greedy_complex(graph: Graph, pos_processing:bool = False, verbose:bool=False) -> Set[Vertice]:
+def min_domination_set_greedy_complex(graph: Graph, pos_processing:bool = True, verbose:bool=False) -> Set[Vertice]:
     domination_set = set()
+
+    count = 0
 
     # preprocessing
     for vertice in graph.vertices:
+        count += 1
         vertice_list = graph.edges.get(vertice)
         # add vertices with no edges to domination set
         if vertice_list == None:
             domination_set.add(vertice)
         # add vertices connected with vertices with only one edge
         elif len(vertice_list) == 1:
+            count += 1
             domination_set.add(list(vertice_list)[0])
 
     if verbose: print(f"preprocessing: {len(domination_set)}")
@@ -40,11 +44,14 @@ def min_domination_set_greedy_complex(graph: Graph, pos_processing:bool = False,
     # sort vertices by inverted cardinality
     cardinality_invert_sorted_vertices = sorted([(vertice,len(graph.edges.get(vertice, list()))) for vertice in graph.vertices], key=lambda tuple: tuple[1], reverse=True)
     #cardinality_invert_sorted_vertices = sorted([(vertice,len(vertice_list)) for vertice, vertice_list in graph.edges.items()], key=lambda tuple: tuple[1], reverse=True)
+    import math
+    count += int(len(graph.vertices)*math.log2(len(graph.vertices)))
 
     # add vertices to dominating set by cardinality order until reaches the goal
     covered = domination_set.copy()
     found = False
     for vertice, _ in cardinality_invert_sorted_vertices:
+        count += 1
         if vertice in covered: continue
 
         # add connected vertices and vertice to covered
@@ -65,15 +72,20 @@ def min_domination_set_greedy_complex(graph: Graph, pos_processing:bool = False,
     if pos_processing:
         # sort domination set vertices by cardinality
         cardinality_sorted_domination_vertices = sorted([(vertice,len(graph.edges.get(vertice, list()))) for vertice in domination_set], key=lambda tuple: tuple[1])
+        count += int(len(domination_set)*math.log2(len(domination_set)))
 
         for vertice, _ in cardinality_sorted_domination_vertices:
+            
             # remove redundant nodes
             domination_set.remove(vertice)
             if not is_domination_set(graph, domination_set):
                 domination_set.add(vertice)
 
+        count += len(cardinality_sorted_domination_vertices)
+        print(len(cardinality_sorted_domination_vertices))
+        
         if verbose: print(f"posprocessing: {len(domination_set)}")
-
+    print(f'contagem: {count}')
     return domination_set
 
 

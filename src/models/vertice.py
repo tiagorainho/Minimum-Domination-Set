@@ -17,12 +17,15 @@ class Vertice:
 
     def distance_manhattan(self, other):
         return abs(self.x-other.x) + abs(self.y-other.y)
+    
+    def __lt__(self, other):
+        return int(self.name) < int(other.name)
 
     def __eq__(self, other):
         return self.name == other.name #self.x == other.x and self.y == other.y
 
     def __hash__(self):
-        return hash(self.name) #self.x*701+self.y*7079
+        return hash(self.name)
     
     def __repr__(self):
         return f'{self.name}'
