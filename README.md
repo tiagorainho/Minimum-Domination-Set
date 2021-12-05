@@ -90,11 +90,9 @@ In order to improve results extraction and to facilitate the comparison between 
 
 # Results and discussion
 
-
+During the whole formal and empirical analysis the **basic operation** considered in these analysis will be the **retrieval of a vertice**.
 
 ## Formal Analysis
-
-For declarative reasons, the operation considered in these analysis will be the search of a vertice.
 
 ### Exhaustive Search
 
@@ -149,62 +147,79 @@ for vertice in cardinality_sorted_domination_vertices:
         domination_set.add(vertice)
 ```
 
-Therefore, the final complexity of this algorithm is $ O(3n) $ which converts to
+Therefore, the final complexity of this algorithm is $ O(3n) $ which simplifies to
 $$ O(n) $$
 
 
 ## Experimental Results
 
-
-
+All results are calculated with ``seed = 100``.
 ### Exhaustive Search
+
+The exhaustive algorithm does not allow us to test the algorithm much further than the number of vertices being more than 22. This is explained by the formal analysis of the exhaustive search.
+The table with the inputs and outputs can be seen bellow
+
+|   Vertices  |    Edges    |  Custom Exhaustive   |      Networkx     |
+|-------------|-------------|----------------------|-------------------|
+|  2          |   1         |      2 vertices      |     2 vertices    |
+|             |             |  0.02 ms             | 0.03 ms           |
+|  4 + 100.0% |  5 + 400.0% |      2 vertices      |     3 vertices    |
+|             |             |   0.05 ms + 149.5%   |  0.01 ms - 46.4%  |
+|  8 + 100.0% | 12 + 140.0% |      4 vertices      |     5 vertices    |
+|             |             |  0.71 ms + 1301.2%   |  0.02 ms + 54.8%  |
+| 16 + 100.0% |  22 + 83.3% |      9 vertices      |     9 vertices    |
+|             |             | 226.8 ms + 32004.3%  |  0.03 ms + 34.1%  |
+|  20 + 25.0% |  34 + 54.5% |      9 vertices      |    12 vertices    |
+|             |             | 5024.77 ms + 2115.5% |  0.03 ms + 15.1%  |
+|  22 + 10.0% |  39 + 14.7% |     11 vertices      |    14 vertices    |
+|             |             | 21665.12 ms + 331.2% |   0.04 ms + 7.4%  |
+
+We can see as expected that the number of vertices returned by the exhaustive search is better than the Networkx version, however the time needed to calculate each graph is much larger for each iteraction.
 
 
 ### Greedy Heuristics
+
+(adicionar a contagem com os vertices q foram lidos)
+
+The greedy algorithm has a much better ratio between being computationally fast and having a good solution, remaining always better than the Networkx however, being slower as seen bellow
+
+|    Vertices    |     Edges      |    Custom Greedy    |      Networkx     |
+|----------------|----------------|---------------------|-------------------|
+| 125            | 584            |     38 vertices     |    49 vertices    |
+|                |                |   1.3 ms            | 0.11 ms           |
+|  250 + 100.0%  | 1247 + 113.5%  |     74 vertices     |    95 vertices    |
+|                |                |   5.08 ms + 292.0%  |  0.17 ms + 58.5%  |
+|  500 + 100.0%  | 2551 + 104.6%  |     139 vertices    |    188 vertices   |
+|                |                |  21.48 ms + 322.6%  |  0.35 ms + 98.3%  |
+| 1000 + 100.0%  | 5126 + 100.9%  |     290 vertices    |    353 vertices   |
+|                |                |  95.76 ms + 345.8%  |  0.64 ms + 84.1%  |
+| 2000 + 100.0%  | 10129 + 97.6%  |     570 vertices    |    744 vertices   |
+|                |                |  356.95 ms + 272.8% |  1.32 ms + 108.1% |
+| 4000 + 100.0%  | 20045 + 97.9%  |    1147 vertices    |   1482 vertices   |
+|                |                |  1420.4 ms + 297.9% |  2.88 ms + 117.3% |
+| 8000 + 100.0%  | 40127 + 100.2% |    2319 vertices    |   2958 vertices   |
+|                |                | 6107.14 ms + 330.0% |  5.84 ms + 102.8% |
+
+When not applying the pós-processing we get better results, however, the ratio between being good and having better results is worse.
+
+|    Vertices    |     Edges      |        Custom       |      Networkx     |
+|----------------|----------------|---------------------|-------------------|
+| 125            | 584            |     45 vertices     |    49 vertices    |
+|                |                |   0.54 ms           | 0.11 ms           |
+|  250 + 100.0%  | 1247 + 113.5%  |     84 vertices     |    93 vertices    |
+|                |                |   2.34 ms + 329.4%  |  0.17 ms + 52.9%  |
+|  500 + 100.0%  | 2551 + 104.6%  |     167 vertices    |    187 vertices   |
+|                |                |   7.63 ms + 226.2%  |  0.35 ms + 106.9% |
+| 1000 + 100.0%  | 5126 + 100.9%  |     328 vertices    |    353 vertices   |
+|                |                |   33.0 ms + 332.5%  |  0.64 ms + 81.8%  |
+| 2000 + 100.0%  | 10129 + 97.6%  |     647 vertices    |    739 vertices   |
+|                |                |  129.05 ms + 291.1% |  1.33 ms + 108.3% |
+| 4000 + 100.0%  | 20045 + 97.9%  |    1303 vertices    |   1483 vertices   |
+|                |                |  515.49 ms + 299.5% |  2.72 ms + 104.2% |
+| 8000 + 100.0%  | 40127 + 100.2% |    2671 vertices    |   2949 vertices   |
+|                |                | 2213.42 ms + 329.4% |  5.69 ms + 109.4% |
 
 
 # Conclusion
 
 In conclusion 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-| Vertices | Edges |       Custom                           |      Networkx                             |
-|----------|-------|----------------------------------------|-------------------------------------------|
-|   125    |   5   |    40 vertices<br>3.48 ms + -99.7%     |    46 vertices<br>0.18 ms + -100.0%       |
-|   250    |   5   |    77 vertices     |    94 vertices    |
-|          |       | 14.05 ms + 303.6%  |   0.3 ms + 60.4%  |
-|   500    |   5   |    148 vertices    |    167 vertices   |
-|          |       | 75.65 ms + 438.4%  |  0.52 ms + 76.5%  |
-|   1000   |   5   |    298 vertices    |    358 vertices   |
-|          |       | 219.91 ms + 190.7% |  1.04 ms + 99.2%  |
-|   2000   |   5   |    610 vertices    |    722 vertices   |
-|          |       | 992.13 ms + 351.2% |  2.01 ms + 93.8%  |

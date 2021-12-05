@@ -19,10 +19,10 @@ def is_domination_set(graph:Graph, vertices: List[Vertice]):
     
 
 def min_domination_set(graph: Graph, verbose:bool=False):
-    return min_domination_set_greedy_complex(graph, verbose)
+    return min_domination_set_greedy_complex(graph, verbose=verbose)
 
 
-def min_domination_set_greedy_complex(graph: Graph, verbose:bool=False) -> Set[Vertice]:
+def min_domination_set_greedy_complex(graph: Graph, pos_processing:bool = False, verbose:bool=False) -> Set[Vertice]:
     domination_set = set()
 
     # preprocessing
@@ -62,16 +62,17 @@ def min_domination_set_greedy_complex(graph: Graph, verbose:bool=False) -> Set[V
 
     if verbose: print(f"processing: {len(domination_set)}")
     
-    # sort domination set vertices by cardinality
-    cardinality_sorted_domination_vertices = sorted([(vertice,len(graph.edges.get(vertice, list()))) for vertice in domination_set], key=lambda tuple: tuple[1])
+    if pos_processing:
+        # sort domination set vertices by cardinality
+        cardinality_sorted_domination_vertices = sorted([(vertice,len(graph.edges.get(vertice, list()))) for vertice in domination_set], key=lambda tuple: tuple[1])
 
-    for vertice, _ in cardinality_sorted_domination_vertices:
-        # remove redundant nodes
-        domination_set.remove(vertice)
-        if not is_domination_set(graph, domination_set):
-            domination_set.add(vertice)
+        for vertice, _ in cardinality_sorted_domination_vertices:
+            # remove redundant nodes
+            domination_set.remove(vertice)
+            if not is_domination_set(graph, domination_set):
+                domination_set.add(vertice)
 
-    if verbose: print(f"posprocessing: {len(domination_set)}")
+        if verbose: print(f"posprocessing: {len(domination_set)}")
 
     return domination_set
 
