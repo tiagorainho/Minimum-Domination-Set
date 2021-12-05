@@ -4,7 +4,7 @@ class Vertice:
     x: int
     y: int
 
-    def __init__(self, name:str, x:int, y:int):
+    def __init__(self, name:str, x:int=0, y:int=0):
         self.name = name
         self.x = x
         self.y = y
@@ -13,7 +13,7 @@ class Vertice:
         return self.distance_manhattan(other)
     
     def distance_euclidean(self, other):
-        return ((self.x-other.x)**2 +(self.y-other.y)**2)**0.5
+        return ((self.x-other.x)*(self.x-other.x) +(self.y-other.y)*(self.y-other.y))**0.5
 
     def distance_manhattan(self, other):
         return abs(self.x-other.x) + abs(self.y-other.y)

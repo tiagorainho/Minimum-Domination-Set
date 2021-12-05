@@ -11,12 +11,13 @@ canvas_width:int = 1000
 canvas_height:int = 1000
 margin:int = 20
 window: Canvas
-number_of_vertices: int = 100
+number_of_vertices: int = 15#1000
 max_number_of_edges:int = 5
-min_distance_between_vertices: int = (canvas_height*canvas_width/(number_of_vertices*500)) #math.log(number_of_vertices, 2) * 100
+min_distance_between_vertices: int = 0#(canvas_height*canvas_width/(number_of_vertices*500)) #math.log(number_of_vertices, 2) * 100
 NORMAL_VERTICE_COLOR:str = "#ffffff"
 DOMINATION_SET_VERTICE_COLOR:str = "#3aead3"
 EDGES_COLOR: str = "#000000"
+CONNECT_WITH_CLOSEST:bool = True
 
 
 
@@ -64,7 +65,7 @@ def show(graph_list:List[Graph] or Graph):
 if __name__ == '__main__':
     random.seed(92984)
     graph = Graph()
-    graph.generate(number_of_vertices, max_number_of_edges, canvas_width, canvas_height, min_distance_between_vertices)
+    graph.generate(number_of_vertices, max_number_of_edges, canvas_width, canvas_height, min_distance_between_vertices, CONNECT_WITH_CLOSEST)
     graph.min_domination_set = algorithms.min_domination_set(graph, True)
     show(graph)
 
