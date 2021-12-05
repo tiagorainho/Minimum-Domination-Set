@@ -47,6 +47,9 @@ class Graph:
 
         assert (0 if width == None else 1) == (0 if height == None else 1)
 
+        if min_distance_between_vertices == None:
+            min_distance_between_vertices = 0
+
         self.width = width
         self.height = height
 
@@ -81,8 +84,8 @@ class Graph:
             while(len(self.vertices) < number_of_vertices):
                 new_vertice = Vertice(str(len(self.vertices)), random.randint(0, width), random.randint(0, height))
                 # recalculate if there is already this vertice
-                #if all([vertice.distance(new_vertice) >= min_distance_between_vertices for vertice in self.vertices]):
-                self.vertices.add(new_vertice)
+                if all([vertice.distance(new_vertice) >= min_distance_between_vertices for vertice in self.vertices]):
+                    self.vertices.add(new_vertice)
         
         t2 = time.perf_counter()
 

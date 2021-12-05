@@ -16,8 +16,8 @@ number_of_vertices:int = 100
 max_number_of_edges:int = 5
 seed:int = 100
 
-WIDTH:int = 1000
-HEIGHT:int = 1000
+WIDTH:int = 800
+HEIGHT:int = 800
 MIN_DISTANCE_BETWEEN_VERTICES:int = 2
 
 
@@ -110,8 +110,8 @@ def compare_both_algorithms_with_table(inputs:List[Tuple[int, int, int]]):
     
 
 if __name__ == '__main__':
-    # show_both_algorithms(number_of_vertices, max_number_of_edges, seed)
-    # exit(0)
+    show_both_algorithms(number_of_vertices, max_number_of_edges, seed)
+    exit(0)
     compare_both_algorithms_with_table([
         # (number_of_vertices, max_number_of_edges, seed),
         # (4, 2, 100),
