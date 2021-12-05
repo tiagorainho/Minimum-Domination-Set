@@ -1,6 +1,10 @@
 # Minimum-Domination-Set
 
 
+# Introduction
+
+Calculating the Minimum dominating Set is important because ...
+
 # Methods
 
 ## Graph Representation
@@ -30,7 +34,7 @@ Then we can use the ``generate()`` method which generates the graph based on som
 | width                              | Integer   | Width of the canvas where the graph is represented    |
 | height                             | Integer   | Height of the canvas where the graph is represented   |
 | minimum_distance_between_vertices  | Integer   | Mininum distance between each vertice                 |
-| connect_with_closest               | Boolean   | Connect each vertice with the *n* closest vertices  |
+| connect_with_closest               | Boolean   | Connect each vertice with the *n* closest vertices    |
 | verbose                            | Boolean   | Prints information about the operation                |
 
 
@@ -40,13 +44,13 @@ The graph is constructed in **two main steps** by the ``generate()`` method:
 
 ### Vertices Generation
 
-The vertice generation is of complexity $ O(n) $ because iterates though the number of vertices to generate
+The vertices generation is of complexity $ O(n) $ because iterates though the number of vertices to generate each one individually
 ```python
 for i in range(number_of_vertices):
     new_vertice = Vertice(name = str(i))
     vertices.add(new_vertice)
 ```
-There is small differentes in this function based on if it is needed to generate also the ``width``, ``height`` and also based on ``minimum_distance_between_vertices``. However these are negligable, for example, when both the ``width`` and ``height`` are different than ``None``, then
+There is small differences in this function based on if it is needed to generate the ``width``, ``height`` and ``minimum_distance_between_vertices`` (for visualization purposes). However these are negligible, for example, when both the ``width`` and ``height`` are different than ``None``, then each vertex must be generated based on weather there is a vertex in the same place and when ``minimum_distance_between_vertices`` is different than ``None`` then it also must guarantee that there are not any vertices in that range. The vertex can be created by
 ```python
 new_vertice = Vertice(
     name = str(len(vertices)),
@@ -57,21 +61,20 @@ new_vertice = Vertice(
 
 ### Edges Generation
 
-The edges are more complex to generate than the vertices based on the argument ``connect_with_closest`` because if ``True``, it means we need to look to the closest vertices from all the others vertices to discover which are closer. This is very helpful when debuging the complex algorithms because even for graphs with just 100 vertices it is almost impossible to figure out what vertices the edges are connecting. The implementation of the generation is done by the following pseudo-code
+The edges are more complex to generate than the vertices based on the argument ``connect_with_closest`` because if ``True``, it means we need to look to the closest vertices from all the others vertices to discover which are closer. This is very helpful when debugging the complex algorithms because even for graphs with just 100 vertices it is almost impossible to figure out what vertices the edges are connecting. The implementation of the generation is done by the following pseudo-code
 
 ```python
 for vertice in vertices:
     if connect_with_closest:
-        closest_vertices = get_closest_vertices(vertice = vertice, n = remaining_number_of_edges)
-        for vertice_to_connect in closest_vertices:
-            add_edge(vertice, vertice_to_connect)
+        vertices_to_connect = get_closest_vertices(vertice = vertice, n = remaining_number_of_edges)
     else:
         vertices_to_connect = random.sample(self.vertices, remaining_number_of_edges)
-        for vertice_to_connect in vertices_to_connect:
-            add_edge(vertice, vertice_to_connect)
+
+    for vertice_to_connect in vertices_to_connect:
+        add_edge(vertice, vertice_to_connect)
 ```
 
-The ``get_closest_vertices()`` method is implemented with a *priority queue* in order to achieve aproximatly $ O(log(n)) $ complexity instead of the python ``sorted()`` which runs in $ O(n log(n)) $. When generating large graphs, this difference is very noticiable because this function runs for every vertice.
+The ``get_closest_vertices()`` method is implemented with a *priority queue* in order to achieve approximately $ O(log(n)) $ complexity instead of the python ``sorted()`` which runs in $ O(n log(n)) $. When generating large graphs, this difference is very noticeable because this function runs for every vertex.
 
 
 ## Auxiliary Features
@@ -82,13 +85,13 @@ Some features were implemented in order to improve graph visualization (``visual
 
 This class is used to provide a visualization method named ``show()`` which takes in a Graph or a list of graphs and plots them in a new window. The vertices are represented by a white circle with the name of the vertice but for easier distinction, the dominating set vertices are represented at a different color.
 
-### Results Extraction
+### Comparison
 
-In order to improve results extraction and to facilitate the comparison between multiple algorithms, 2 defined functions compare both the Custom and the Networkx implementation of the mininum dominating set:
+In order to improve results extraction and to facilitate the comparison between multiple algorithms, 2 defined functions compare both the Custom and the Networkx implementation of the minimum dominating set:
 1) ``show_both_algorithms()``: given the inputs (*number of vertices*, *medium number of edges* and *seed*), returns the plots of both the implementations.
 2) ``compare_both_algorithms_with_table()``: given a list of inputs (list of the input of the previous function), returns a table with statistics.
 
-# Results and discussion
+# Results and Discussion
 
 During the whole formal and empirical analysis the **basic operation** considered in these analysis will be the **retrieval of a vertice**.
 
@@ -126,7 +129,8 @@ for vertice in graph.vertices:
         domination_set.add(vertice_list[0])
 ```
 
-We can find the dominating set by ordering the vertices with $ O(n log(n)) $ and following the block of pseudo-code with $ O(n) $ complexity resulting in $ O(2n log(n)) $ which simplifies to
+In order to get a dominating set, it is more likely that highly linked vertices are more important as a member of the dominating set so that a larger number of other vertices can be included and therefore expand even more the set of included vertices.
+Having the previous said in mind, in order to find the dominating set we should start by ordering the vertices (which is $ O(n log(n)) $) and then add the vertex and their adjacent vertices, following the block of pseudo-code we can check that has a $ O(n) $ complexity resulting in $ O(2n log(n)) $ which simplifies to
 $$ O(n log(n)) $$
 ```python
 covered = set()
@@ -178,6 +182,24 @@ The table with the inputs and outputs can be seen bellow
 | 22 + 10.0% | 19 + 11.8% |     11 vertices      |    11 vertices    |    14 vertices    |
 |            |            | 21415.71 ms + 331.6% |   0.12 ms + 37.8% |   0.04 ms + 4.5%  |
 
+A table with the basic operations is presented as follows
+
+|    Vertices    |     Edges      |       Exhaustive      |   Greedy w pós-processing    | Greedy w/out pós-processing |
+|----------------|----------------|-----------------------|------------------------------|-----------------------------|
+|  4             | 2              |       2 vertices      |     2 vertices               |     3 vertices              |
+|                |                |         15 b/o        |        23 b/o                |        16 b/o               |
+|  8 + 100.0%    | 6 + 200.0%     |       4 vertices      |     4 vertices               |     5 vertices              |
+|                |                |    255 b/o + 1600.0%  |        54 b/o + 134.8%       |        38 b/o + 137.5%      |
+|  12 + 50.0%    | 11 + 83.3%     |       5 vertices      |     5 vertices               |     5 vertices              |
+|                |                |   4095 b/o + 1505.9%  |       75 b/o + 38.9%         |        59 b/o + 55.3%       |
+| 16 + 33.3%     | 11 + 0.0%      |       9 vertices      |     9 vertices               |     10 vertices             |
+|                |                |  65535 b/o + 1500.4%  |       131 b/o + 74.7%        |       88 b/o + 49.1%        |
+| 20 + 25.0%     | 17 + 54.5%     |       9 vertices      |     9 vertices               |     11 vertices             |
+|                |                | 1048575 b/o + 1500.0% |       172 b/o + 31.3%        |       123 b/o + 39.8%       |
+| 22 + 10.0%     | 19 + 11.8%     |       11 vertices     |    11 vertices               |    11 vertices              |
+|                |                | 4194303 b/o + 300.0%  |       183 b/o + 6.4%         |       134 b/o + 8.9%        |
+
+
 We can see as expected that the number of vertices returned by the exhaustive search is smaller than the Networkx version, however the elapsed time is much larger even for small increases in the size of the graph, for example in the last row, the increase in vertices was 10% and edges 11.8%, however, the elapsed time increased by 331.6%.
 
 The exhaustive algorithm is therefore experimentally comproved to be exponential while both the Greedy and Networkx can only be concluded that they are not exponential.
@@ -228,4 +250,4 @@ A table with the basic operations is presented as follows
 
 # Conclusion
 
-In conclusion the minimum dominating set implemented in this project while it is not as fast as the dominating set function of the Networkx library, it is still very fast and provides much better results while still providing $ n log{n} $ complexity.
+In conclusion the minimum dominating set implemented in this project while it is not as fast as the dominating set function of the Networkx library, it is still very fast and provides much better results while still providing $ O(nlog{n}) $ complexity.

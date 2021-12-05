@@ -11,8 +11,8 @@ canvas_width:int = 1000
 canvas_height:int = 1000
 margin:int = 20
 window: Canvas
-number_of_vertices: int = 1000
-max_number_of_edges:int = 5
+number_of_vertices: int = 9
+max_number_of_edges:int = 3
 min_distance_between_vertices: int = 0#(canvas_height*canvas_width/(number_of_vertices*500)) #math.log(number_of_vertices, 2) * 100
 NORMAL_VERTICE_COLOR:str = "#ffffff"
 DOMINATION_SET_VERTICE_COLOR:str = "#3aead3"
